@@ -1,4 +1,4 @@
-# I got help from chatGPT in some parts of that makefile: https://chat.openai.com/share/99729089-038f-4353-a6aa-959b7c56e547
+# I got help from chatGPT in some parts of that makefile: https://chat.openai.com/share/d41febf6-a22b-4d15-a0b1-ab6f9ab8afed
 
 # dir names
 GENERATED_DIR := $(CURDIR)/generated
