@@ -27,21 +27,78 @@ int yyerror(char * s);
 
 
 %%
-program: block '.'
+program:
+    {
+      printf("started parsing program\n");
+    } block {
+      printf("in between block and dot\n");
+    } '.' {
+      printf("completed parsing program\n");
+      exit(0);
+    }
   ;
 
-block:                  const_decl var_decl proc_decl statement
+block:
+    {
+      printf("started parsing block\n");
+    }
+    const_decl {
+      printf("in between const_decl and var_decl\n");
+      /* I put those debugging printf calls in between with the help of copilot */
+    } var_decl {
+      printf("in between var_decl and proc_decl\n");
+    }
+    proc_decl {
+      printf("in between proc_decl and statement\n");
+    }
+    statement {
+      printf("completed parsing block\n");
+    }
   ;
 
-const_decl:             CONST const_assignment_list ';'
-  |
+const_decl:
+  {
+    printf("started parsing nonempty const_decl\n");
+  } CONST {
+    printf("in between token CONST and const_assignment_list\n");
+  } const_assignment_list {
+    printf(" in between const_assignment_list and ;\n");
+  }';' {
+    printf("completed parsing nonempty const_decl\n");
+  }
+  | {
+    printf("parsing empty const_decl\n");
+  }
   ;
 
-const_assignment_list:  const_assignment
-  |                     const_assignment_list ',' const_assignment
+const_assignment_list:
+  {
+    printf("started parsing const_assignment_list with multiple const_assignments\n");
+  } const_assignment_list {
+    printf("in between const_assignment_list and ,\n");
+  } ',' {
+    printf("in between , and const_assignment\n");
+  } const_assignment {
+    printf("completed parsing const_assignment_list with multiple const_assignments\n");
+  }
+  | {
+    printf("started parsing const_assignment_list with single const_assignment\n");
+  } const_assignment {
+    printf("completed parsing const_assignment_list with single const_assignment\n");
+  }
   ;
 
-const_assignment:       IDENTIFIER '=' NUMBER;
+const_assignment:
+  {
+    printf("started parsing const_assignment\n");
+  } IDENTIFIER {
+    printf("in between IDENTIFIER and =\n");
+  } '=' {
+    printf("in between = and NUMBER\n");
+  } NUMBER {
+    printf("completed parsing const_assignment\n");
+  }
+  ;
 
 var_decl:               VAR identifier_list ';'
   |

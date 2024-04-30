@@ -1,0 +1,17 @@
+const
+  PI = 3.14159, e = 2.71828;
+
+.
+simple const declaration example
+
+
+var i, s;
+begin
+  i := 0; s := 0;
+  while i < 5 do
+  begin
+    i := i + 1;
+    s := s + i * i
+  end
+end.
+from wikipedia example

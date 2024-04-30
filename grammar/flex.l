@@ -3,7 +3,7 @@
 %}
 
 %%
-const                                       { return CONST; } /* reserved multicharacter tokens */
+const                                       { printf("lexer: returning token CONST\n"); return CONST; } /* reserved multicharacter tokens */
 var                                         { return VAR; }
 procedure                                   { return PROCEDURE; }
 :=                                          { return ASSIGN; }
@@ -23,13 +23,11 @@ odd                                         { return ODD; }
 
 ([0-9]+|([0-9]*\.[0-9]+)([eE][-+]?[0-9]+)?) {return NUMBER; } /* from lecture slides */ /* pattern matching tokens */
 
-[A-Za-z_][A-Za-z_0-9]*                      { return IDENTIFIER; } /* from lecture slides */
-
-
-.                                           { return yytext[0]; } /* return other single characters directly */ /* special */
+[A-Za-z_][A-Za-z_0-9]*                      { printf("lexer: returning token identifier: %s\n", yytext); return IDENTIFIER; } /* from lecture slides */
 
 [ \t\n]                                     ; /* consume those */
 
+.                                           { return *yytext; } /* return other single characters directly */ /* special */
 
 %%
 
