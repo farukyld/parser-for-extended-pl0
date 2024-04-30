@@ -73,18 +73,27 @@ const_decl:
 
 const_assignment_list:
   {
-    printf("started parsing const_assignment_list with multiple const_assignments\n");
-  } const_assignment_list {
-    printf("in between const_assignment_list and ,\n");
-  } ',' {
-    printf("in between , and const_assignment\n");
-  } const_assignment {
-    printf("completed parsing const_assignment_list with multiple const_assignments\n");
+    printf("started parsing const_assignment_list with single single asignment\n");
   }
-  | {
-    printf("started parsing const_assignment_list with single const_assignment\n");
-  } const_assignment {
-    printf("completed parsing const_assignment_list with single const_assignment\n");
+  const_assignment
+  {
+    printf("completed parsing const_assignment_list with single single asignment\n");
+  }
+  |
+  /* {
+    printf("started parsing const_assignment_list with multiple const_assignments\n");
+  }  */
+  const_assignment_list
+  {
+    printf("in between const_assignment_list and ,\n");
+  }
+  ','
+  {
+    printf("in between , and single asignment\n");
+  }
+  const_assignment
+  {
+    printf("completed parsing const_assignment_list with multiple const_assignments\n");
   }
   ;
 
