@@ -1,9 +1,122 @@
-const
-  PI = 3.14159, e = 2.71828;
 
-.
-simple const declaration example
 
+var x, y, z, q, r, n, f;
+
+procedure multiply;
+var a, b;
+begin
+  a := x;
+  b := y;
+  z := 0;
+  while b > 0 do
+  begin
+    if odd b then z := z + a;
+    a := 2 * a;
+    b := b / 2
+  end
+end;
+
+procedure divide;
+var w;
+begin
+  r := x;
+  q := 0;
+  w := y;
+  while w <= r do w := 2 * w;
+  while w > y do
+  begin
+    q := 2 * q;
+    w := w / 2;
+    if w <= r then
+    begin
+      r := r - w;
+      q := q + 1
+    end
+  end
+end;
+
+procedure gcd;
+var f, g;
+begin
+  f := x;
+  g := y;
+  while f <> g do
+  begin
+    if f < g then g := g - f;
+    if g < f then f := f - g
+  end;
+  z := f
+end;
+
+procedure fact;
+begin
+  if n > 1 then
+  begin
+    f := n * f;
+    n := n - 1;
+    call fact
+  end
+end;
+
+begin
+  x:=stdin; y:=stdin; call multiply; stdout:=z;
+  x:=stdin; y:=stdin; call divide; stdout:=q; stdout:=r;
+end. success
+from wikipedia, modified
+
+
+const max = 100;
+var arg, ret;
+
+procedure isprime;
+var i;
+begin
+	ret := 1;
+	i := 2;
+	while i < arg do
+	begin
+		if arg / i * i = arg then
+		begin
+			ret := 0;
+			i := arg
+		end;
+		i := i + 1
+	end
+end;
+
+procedure primes;
+begin
+	arg := 2;
+	while arg < max do
+	begin
+		call isprime;
+		if ret = 1 then stdout := arg;
+		arg := arg + 1
+	end
+end;
+
+call primes
+. success
+from wikipedia (modified)
+
+
+
+var x, squ;
+
+procedure square;
+begin
+   squ:= x * x
+end;
+
+begin
+   x := 1;
+   while x <= 10 do
+   begin
+      call square;
+      x := x + 1
+   end
+end. success
+from wikipedia (modified)
 
 var i, s;
 begin
@@ -13,5 +126,12 @@ begin
     i := i + 1;
     s := s + i * i
   end
-end.
-from wikipedia example
+end. success
+from wikipedia
+
+
+const
+  PI = 3.14159, e = 2.71828;
+
+. success
+simple const declaration example

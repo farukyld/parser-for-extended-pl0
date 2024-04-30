@@ -85,7 +85,8 @@ const_assignment_list:
     printf("started parsing const_assignment_list with multiple const_assignments\n");
   }   */
   /*buraya bir sey koyamiyoruz cunku koydugumuz zaman, const_assignment_list'e cokludan mi tekliden mi girebilecegini bilemedigi icin hata veriyor? */
-  const_assignment_list {
+  const_assignment_list 
+  {
     printf("in between const_assignment_list and ,\n");
   }
   ','
@@ -101,11 +102,17 @@ const_assignment_list:
 const_assignment:
   {
     printf("started parsing const_assignment\n");
-  } IDENTIFIER {
+  } 
+  IDENTIFIER 
+  {
     printf("in between IDENTIFIER and =\n");
-  } '=' {
+  } 
+  '=' 
+  {
     printf("in between = and NUMBER\n");
-  } NUMBER {
+  } 
+  NUMBER 
+  {
     printf("completed parsing const_assignment\n");
   }
   ;
