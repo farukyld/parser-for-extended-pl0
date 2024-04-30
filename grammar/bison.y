@@ -74,17 +74,18 @@ const_decl:
 const_assignment_list:
   {
     printf("started parsing const_assignment_list with single single asignment\n");
-  }
+  } 
+  /*burayi yorum yapip asagidaki kuraldakini yorumdan cikarinca direkt oradan baslamaya calisiyor, ve sonsuz donguye giriyor.*/
   const_assignment
   {
     printf("completed parsing const_assignment_list with single single asignment\n");
   }
-  |
+  | 
   /* {
     printf("started parsing const_assignment_list with multiple const_assignments\n");
-  }  */
-  const_assignment_list
-  {
+  }   */
+  /*buraya bir sey koyamiyoruz cunku koydugumuz zaman, const_assignment_list'e cokludan mi tekliden mi girebilecegini bilemedigi icin hata veriyor? */
+  const_assignment_list {
     printf("in between const_assignment_list and ,\n");
   }
   ','
