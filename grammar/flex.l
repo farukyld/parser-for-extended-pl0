@@ -1,33 +1,40 @@
 %{
-#include <stdlib.h>
 #include PARSER_HEADER
-#include <math.h>
 %}
 
 %%
+const                                       { return CONST; } /* reserved multicharacter tokens */
+var                                         { return VAR; }
+procedure                                   { return PROCEDURE; }
+:=                                          { return ASSIGN; }
+call                                        { return CALL; }
+begin                                       { return BEGIN; }
+end                                         { return END; }
+if                                          { return IF; }
+then                                        { return THEN; }
+while                                       { return WHILE; }
+do                                          { return DO; }
+odd                                         { return ODD; }
+\<\>                                        { return NE; }
+\<=                                         { return LTE; }
+\>=                                         { return GTE; }
 
-del    { return DEL; }
-print_symtab { return PRINT_SYMTAB; }
 
-([0-9]+|([0-9]*\.[0-9]+)([eE][-+]?[0-9]+)?) {
-                yylval.dvala = atof(yytext);
-                return NUMBER;
-        }
 
-[ \t]   ;                /* ignore white space */
+([0-9]+|([0-9]*\.[0-9]+)([eE][-+]?[0-9]+)?) {return NUMBER; } /* from lecture slides */ /* pattern matching tokens */
 
-[A-Za-z_][A-Za-z_0-9]*    {       /* return symbol pointer */
-                yylval.symp = sym_get_or_create(yytext);
-                return NAME;
-        }
+[A-Za-z_][A-Za-z_0-9]*                      { return NAME; } /* from lecture slides */
 
-"$"     { return 0; }
 
-\n      |
-.       return yytext[0];
+.                                           { return yytext[0]; } /* return other single characters directly */ /* special */
+
+[ \t\n]                                     ; /* consume those */
+
 
 %%
-
+int main(){
+  yylex();
+}
 void yyerror(char*s){
-        printf("%s\n",s);
+printf("%s\n",s);
 }

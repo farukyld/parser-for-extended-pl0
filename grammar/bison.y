@@ -4,59 +4,99 @@
 #include <string.h>
 int yylex();
 int yyerror(char * s);
-/*bu kisimda yapilan bildiriler, header include'lari ve imzalamalar parser.c'nin icerisinde bulunuyor. parser.h'de degil*/
+/* the declarations and includes made here are put into parser.c, not parser.h */
 %}
 
-%union {
-        double dvala;
-        void* symp;
-}
+%token CONST // 'const'
+%token IDENTIFIER
+%token NUMBER
+%token VAR  // var
+%token PROCEDURE // procedure
+%token ASSIGN // :=
+%token CALL // call
+%token BEGIN // begin
+%token END // end
+%token IF // if
+%token THEN // then
+%token WHILE // while
+%token DO // do
+%token ODD // odd
+%token NE // <>
+%token LTE // <=
+%token GTE // >=
 
-
-%token <symp> NAME
-%token <dvala> NUMBER
-%token DEL
-%token PRINT_SYMTAB
-%left '-' '+'
-%left '*' '/'
-%nonassoc UMINUS
-
-
-%type <dvala> expression
 
 %%
-start_symbol:   statement_list
-        ;
-// running this statement:
-// a_newly_symbol = another_new_symbol ... the_last_new_symbol ...
-// assigns the lhs value with the name the_last_new_symbol
-statement_list: statement '\n'                  //{printf("parsed first statement\n");}
-        |       statement_list statement '\n'   //{printf("parsed another statement\n");}
-        //|       statement_list '\n'           //{printf("parsed another statement\n");}
-        //|       '\n'                          //{printf("parsed first statement\n");}
-        ;
+program: block '.'
+  ;
 
-statement:      NAME '=' expression     {  }
-        |       expression              {  }
-        |       DEL NAME                {  }  // the name apperaing in that rule
-                                                                // creates a symbol at global_entry, if not present in the table.
-                                                                // we shall also release the lock for the global entry here.
-        |       PRINT_SYMTAB            {  }
-        |       // allow empty lines.
-        ;
+block:                  const_decl var_decl proc_decl statement
+  ;
 
-expression:     expression '+' expression { $$ = $1 + $3; }
-        |       expression '-' expression { $$ = $1 - $3; }
-        |       expression '*' expression { $$ = $1 * $3; }
-        |       expression '/' expression
-                                {       if($3 == 0.0)
-                                                yyerror("divide by zero");
-                                        else
-                                                $$ = $1 / $3;
-                                }
-        |       '-' expression %prec UMINUS     { $$ = -$2; }
-        |       '(' expression ')'      { $$ = $2; }
-        |       NUMBER
-        |       NAME                    { $$ = $1->value; }
-        ;
-%%
+const_decl:             CONST const_assignment_list ';'
+  |
+  ;
+
+const_assignment_list:  const_assignment
+  |                     const_assignment_list ',' const_assignment
+  ;
+
+const_assignment:       IDENTIFIER '=' NUMBER;
+
+var_decl:               VAR identifier_list ';'
+  |
+  ;
+
+identifier_list:        IDENTIFIER
+  |                     identifier_list ',' IDENTIFIER
+  ;
+
+proc_decl:              proc_decl PROCEDURE IDENTIFIER ';' block ';'
+  |
+  ;
+
+statement:              IDENTIFIER ASSIGN expression
+  |                     CALL IDENTIFIER
+  |                     BEGIN statement_list END
+  |                     IF condition THEN statement
+  |                     WHILE condition DO statement
+  |
+  ;
+
+statement_list:         statement
+  |                     statement_list ';' statement
+  ;
+
+condition:              ODD expression
+  |                     expression relation expression
+  ;
+
+relation:               '='
+  |                     NE
+  |                     '<'
+  |                     '>'
+  |                     LTE
+  |                     GTE
+  ;
+
+expression:             term
+  |                     add_sub_operator term
+  |                     expression add_sub_operator term
+  ;
+
+add_sub_operator:       '+'
+  |                     '-'
+  ;
+
+term:                   factor
+  |                     term mul_div_operator factor
+  ;
+
+mul_div_operator:       '*'
+  |                     '/'
+  ;
+
+factor:                 IDENTIFIER
+  |                     NUMBER
+  |                     '(' expression ')'
+  ;
