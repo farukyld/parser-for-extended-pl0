@@ -39,7 +39,7 @@ LINK_FLAGS		:=  -o .$(LINKED_EXEC) -ll
 # run
 run: .$(LINKED_EXEC)
 	@echo "$(GREEN)running executable.$(DEFAULT)"
-	./$(LINKED_EXEC)
+	./.$(LINKED_EXEC)
 
 
 # link c files into executable
@@ -48,7 +48,7 @@ run: .$(LINKED_EXEC)
 	gcc $(OBJ_FILES) $(LINK_FLAGS)
 
 # alias for above rule
-link: $(LINKED_EXEC)
+link: .$(LINKED_EXEC)
 
 
 # directory creation
