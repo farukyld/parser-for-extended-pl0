@@ -14,7 +14,7 @@ int yyerror(char * s);
 %token PROCEDURE // procedure
 %token ASSIGN // :=
 %token CALL // call
-%token BEGIN // begin
+%token BGN // begin
 %token END // end
 %token IF // if
 %token THEN // then
@@ -57,7 +57,7 @@ proc_decl:              proc_decl PROCEDURE IDENTIFIER ';' block ';'
 
 statement:              IDENTIFIER ASSIGN expression
   |                     CALL IDENTIFIER
-  |                     BEGIN statement_list END
+  |                     BGN statement_list END
   |                     IF condition THEN statement
   |                     WHILE condition DO statement
   |

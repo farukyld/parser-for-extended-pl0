@@ -8,7 +8,7 @@ var                                         { return VAR; }
 procedure                                   { return PROCEDURE; }
 :=                                          { return ASSIGN; }
 call                                        { return CALL; }
-begin                                       { return BEGIN; }
+begin                                       { return BGN; }
 end                                         { return END; }
 if                                          { return IF; }
 then                                        { return THEN; }
@@ -23,7 +23,7 @@ odd                                         { return ODD; }
 
 ([0-9]+|([0-9]*\.[0-9]+)([eE][-+]?[0-9]+)?) {return NUMBER; } /* from lecture slides */ /* pattern matching tokens */
 
-[A-Za-z_][A-Za-z_0-9]*                      { return NAME; } /* from lecture slides */
+[A-Za-z_][A-Za-z_0-9]*                      { return IDENTIFIER; } /* from lecture slides */
 
 
 .                                           { return yytext[0]; } /* return other single characters directly */ /* special */
@@ -32,9 +32,7 @@ odd                                         { return ODD; }
 
 
 %%
-int main(){
-  yylex();
-}
+
 void yyerror(char*s){
 printf("%s\n",s);
 }
