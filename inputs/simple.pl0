@@ -1,6 +1,7 @@
-
-
-var x, y, z, q, r, n, f;
+/*ab
+cd ef*/
+var x, y, z,/*ab
+cd ef*/ q, r, n, f;
 
 procedure multiply;
 var a, b;
