@@ -28,12 +28,7 @@ int yyerror(char * s);
 
 
 %%
-program:
-    {
-      printf("started parsing program\n");
-    } block {
-      printf("in between block and dot\n");
-    } '.' {
+program: block  '.' {
       printf("completed parsing program\n");
       exit(0);
     }
@@ -57,69 +52,19 @@ block:
     }
   ;
 
-const_decl:
-  {
-    printf("started parsing nonempty const_decl\n");
-  } CONST {
-    printf("in between token CONST and const_assignment_list\n");
-  } const_assignment_list {
-    printf(" in between const_assignment_list and ;\n");
-  }';' {
-    printf("completed parsing nonempty const_decl\n");
-  }
-  | {
-    printf("parsing empty const_decl\n");
-  }
+const_decl:             CONST const_assignment_list ';'     { printf("completed parsing nonempty const_decl\n"); }
+  |                                                         { printf("parsing empty const_decl\n"); }
   ;
 
-const_assignment_list:
-  {
-    printf("started parsing const_assignment_list with single single asignment\n");
-  }
-  /*burayi yorum yapip asagidaki kuraldakini yorumdan cikarinca direkt oradan baslamaya calisiyor, ve sonsuz donguye giriyor.*/
-  const_assignment
-  {
-    printf("completed parsing const_assignment_list with single single asignment\n");
-  }
-  |
-  /* {
-    printf("started parsing const_assignment_list with multiple const_assignments\n");
-  }   */
-  /*buraya bir sey koyamiyoruz cunku koydugumuz zaman, const_assignment_list'e cokludan mi tekliden mi girebilecegini bilemedigi icin hata veriyor? */
-  const_assignment_list
-  {
-    printf("in between const_assignment_list and ,\n");
-  }
-  ','
-  {
-    printf("in between , and single asignment\n");
-  }
-  const_assignment
-  {
-    printf("completed parsing const_assignment_list with multiple const_assignments\n");
-  }
+const_assignment_list:  const_assignment                            { printf("completed parsing const_assignment_list with single const_assignment"); }
+  |                     const_assignment_list ',' const_assignment  { printf("completed parsing const_assignment_list with multiple const_assignments\n"); }
   ;
 
-const_assignment:
-  {
-    printf("started parsing const_assignment\n");
-  }
-  IDENTIFIER
-  {
-    printf("in between IDENTIFIER and =\n");
-  }
-  '='
-  {
-    printf("in between = and NUMBER\n");
-  }
-  NUMBER
-  {
-    printf("completed parsing const_assignment\n");
-  }
+const_assignment: IDENTIFIER '=' NUMBER
   ;
 
-var_decl:               VAR identifier_list ';'
-  |
+var_decl:               VAR identifier_list ';'             { printf("completed nonempty var decl.");}
+  |                                                         { printf("completed empty var decl.");}
   ;
 
 identifier_list:        IDENTIFIER
