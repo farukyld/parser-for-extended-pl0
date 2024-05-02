@@ -12,7 +12,13 @@ int yyerror(char * s);
 %token NUMBER
 %token VAR  // var
 %token PROCEDURE // procedure
+%token FUNCTION // function
+%token RETURN // return
 %token ASSIGN // :=
+%token BREAK // break
+%token WRITELINE // writeline
+%token WRITE // write
+%token READ // read
 %token CALL // call
 %token BGN // begin
 %token END // end
@@ -34,22 +40,7 @@ program: block  '.' {
     }
   ;
 
-block:
-    {
-      printf("started parsing block\n");
-    }
-    const_decl {
-      printf("in between const_decl and var_decl\n");
-      /* I put those debugging printf calls in between with the help of copilot */
-    } var_decl {
-      printf("in between var_decl and proc_decl\n");
-    }
-    proc_decl {
-      printf("in between proc_decl and statement\n");
-    }
-    statement {
-      printf("completed parsing block\n");
-    }
+block: const_decl var_decl func_decl proc_decl statement
   ;
 
 const_decl:             CONST const_assignment_list ';'     { printf("completed parsing nonempty const_decl\n"); }
@@ -74,6 +65,11 @@ identifier_list:        IDENTIFIER
 proc_decl:              proc_decl PROCEDURE IDENTIFIER ';' block ';'
   |
   ;
+
+func_decl:              func_decl FUNCTION IDENTIFIER '(' identifier_list ')' block ';'
+  |
+  ;
+
 // to modify the existing structure of this statement to adapt to
 // include if then else statement, use the grammar in Figure 4.10
 // in the book. (Compilers, principles and techniques, tools 2nd ed. by alfred v. aho, monica s. lam, ravi sethi, jeffrey d. ullman)
@@ -93,8 +89,10 @@ statement:              matched_statement             { printf("parsed statement
 matched_statement:      IF condition THEN matched_statement ELSE matched_statement { printf("parsed matched_statement using if cond then matched else matched\n"); }
   |                     IDENTIFIER ASSIGN expression                               { printf("parsed matched_statement using assignment\n"); }
   |                     CALL IDENTIFIER                                            { printf("parsed matched_statement using call statement\n"); }
-  |                     BGN statement_list  { printf("in between statement_list and token end"); }
-    END                                     { printf("parsed matched_statement using block statement\n"); }
+  |                     BGN statement_list END                                     { printf("parsed matched_statement using block statement\n"); }
+  |                     RETURN expression                                          { printf("parsed matched_statement using return statement\n"); }
+  |                     BREAK                                                      { printf("parsed matched_statement using break statement\n"); }
+  |                     io_statement                                               { printf("parsed matched_statement using io statement\n"); }
   |                                                                                { printf("parsed matched_statement using empty prod. rule\n"); }
   ;
 
@@ -108,6 +106,10 @@ open_statement:         IF condition THEN statement                             
 statement_list:         statement                     { printf("parsed statement list using single statement\n"); }
   |                     statement_list ';' statement  { printf("parsed statement list combining a statement to the statement_list\n"); }
   ;
+
+io_statement:           READ '(' IDENTIFIER ')'
+  |                     WRITE '(' IDENTIFIER ')'
+  |                     WRITELINE '(' IDENTIFIER ')'
 
 condition:              ODD expression
   |                     expression relation expression
@@ -136,6 +138,7 @@ term:                   factor
 
 mul_div_operator:       '*'
   |                     '/'
+  |                     '%'
   ;
 
 factor:                 IDENTIFIER

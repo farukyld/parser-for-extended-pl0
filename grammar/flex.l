@@ -13,6 +13,12 @@ void multiline_comment();
 const                                       { printf("lexer: returning token CONST\n"); return CONST; } /* reserved multicharacter tokens */
 var                                         { return VAR; }
 procedure                                   { return PROCEDURE; }
+function                                    { return FUNCTION; }
+return                                      { return RETURN; }
+break                                       { return BREAK; }
+writeline                                   { return WRITELINE; }
+write                                       { return WRITE; }
+read                                        { return READ; }
 :=                                          { return ASSIGN; }
 call                                        { return CALL; }
 begin                                       { return BGN; }

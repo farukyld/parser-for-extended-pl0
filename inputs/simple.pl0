@@ -3,6 +3,13 @@ cd ef*/
 var x, y, z,/*ab
 cd ef*/ q, r, n, f;
 
+
+function sqrt(x)
+  return 1;
+
+function modulo(a,b)
+  return a%b;
+
 procedure multiply;
 var a, b;
 begin
@@ -59,9 +66,10 @@ begin
   end
 end;
 
+
 begin
-  x:=stdin; y:=stdin; call multiply; stdout:=z;
-  x:=stdin; y:=stdin; call divide; stdout:=q; stdout:=r;
+  read(x); read(y); call multiply; write(z);
+  read(x); read(y); call divide; write(q); write(r);
 end. success
 from wikipedia, modified
 
