@@ -18,6 +18,7 @@ int yyerror(char * s);
 %token END // end
 %token IF // if
 %token THEN // then
+%token ELSE // then
 %token WHILE // while
 %token DO // do
 %token ODD // odd
@@ -74,18 +75,18 @@ const_decl:
 const_assignment_list:
   {
     printf("started parsing const_assignment_list with single single asignment\n");
-  } 
+  }
   /*burayi yorum yapip asagidaki kuraldakini yorumdan cikarinca direkt oradan baslamaya calisiyor, ve sonsuz donguye giriyor.*/
   const_assignment
   {
     printf("completed parsing const_assignment_list with single single asignment\n");
   }
-  | 
+  |
   /* {
     printf("started parsing const_assignment_list with multiple const_assignments\n");
   }   */
   /*buraya bir sey koyamiyoruz cunku koydugumuz zaman, const_assignment_list'e cokludan mi tekliden mi girebilecegini bilemedigi icin hata veriyor? */
-  const_assignment_list 
+  const_assignment_list
   {
     printf("in between const_assignment_list and ,\n");
   }
@@ -102,16 +103,16 @@ const_assignment_list:
 const_assignment:
   {
     printf("started parsing const_assignment\n");
-  } 
-  IDENTIFIER 
+  }
+  IDENTIFIER
   {
     printf("in between IDENTIFIER and =\n");
-  } 
-  '=' 
+  }
+  '='
   {
     printf("in between = and NUMBER\n");
-  } 
-  NUMBER 
+  }
+  NUMBER
   {
     printf("completed parsing const_assignment\n");
   }
@@ -128,17 +129,39 @@ identifier_list:        IDENTIFIER
 proc_decl:              proc_decl PROCEDURE IDENTIFIER ';' block ';'
   |
   ;
-
-statement:              IDENTIFIER ASSIGN expression
+// to modify the existing structure of this statement to adapt to
+// include if then else statement, use the grammar in Figure 4.10
+// in the book. (Compilers, principles and techniques, tools 2nd ed. by alfred v. aho, monica s. lam, ravi sethi, jeffrey d. ullman)
+// the rule without if then else structure:
+/* statement:              IDENTIFIER ASSIGN expression
   |                     CALL IDENTIFIER
   |                     BGN statement_list END
   |                     IF condition THEN statement
   |                     WHILE condition DO statement
   |
+  ; */
+
+statement:              matched_statement             { printf("parsed statement using matched statement\n"); }
+  |                     open_statement                { printf("parsed statement using open statement\n"); }
   ;
 
-statement_list:         statement
-  |                     statement_list ';' statement
+matched_statement:      IF condition THEN matched_statement ELSE matched_statement { printf("parsed matched_statement using if cond then matched else matched\n"); }
+  |                     IDENTIFIER ASSIGN expression                               { printf("parsed matched_statement using assignment\n"); }
+  |                     CALL IDENTIFIER                                            { printf("parsed matched_statement using call statement\n"); }
+  |                     BGN statement_list  { printf("in between statement_list and token end"); }
+    END                                     { printf("parsed matched_statement using block statement\n"); }
+  |                                                                                { printf("parsed matched_statement using empty prod. rule\n"); }
+  ;
+
+// there was a shift/reduce conflict when the WHILE condition DO statement was one of the matched_statements productions.
+// I intentionally make it one of the production rules of open_statement, because it lookes similar to the form of the open statement.
+open_statement:         IF condition THEN statement                                { printf("parsed open_statement using if cond then statement\n"); }
+  |                     IF condition THEN matched_statement ELSE open_statement    { printf("parsed open_statement using if cond then matched else open\n"); }
+  |                     WHILE condition DO statement                               { printf("parsed open_statement using while cond do statement\n"); }
+  ;
+
+statement_list:         statement                     { printf("parsed statement list using single statement\n"); }
+  |                     statement_list ';' statement  { printf("parsed statement list combining a statement to the statement_list\n"); }
   ;
 
 condition:              ODD expression

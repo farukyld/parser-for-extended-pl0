@@ -16,8 +16,9 @@ procedure                                   { return PROCEDURE; }
 :=                                          { return ASSIGN; }
 call                                        { return CALL; }
 begin                                       { return BGN; }
-end                                         { return END; }
+end                                         { printf("lexer: returning token end at line %d\n",yylineno);return END; }
 if                                          { return IF; }
+else                                        { return ELSE; }
 then                                        { return THEN; }
 while                                       { return WHILE; }
 do                                          { return DO; }
@@ -32,8 +33,8 @@ odd                                         { return ODD; }
 
 [A-Za-z_][A-Za-z_0-9]*                      { printf("lexer: returning token identifier: %s\n", yytext); return IDENTIFIER; } /* from lecture slides */
 
-[ \t\n]                                     ; /* consume those */
-
+[ \t]                                     ; /* consume those */
+\n                                          { yylineno++; }
 .                                           { printf("lexer: returning identically: %s\n", yytext); return *yytext; } /* return other single characters directly */ /* special */
 
 %%
@@ -54,6 +55,7 @@ void multiline_comment(){
       // putchar(c); // I checked the assembly dump of the generated object file (object generated from lexer.c generated from this lex file)
       // it seems putchar is not used. and man putchar says putchar is to put character to standart output. and from the debug prints I made, I decide to comment this out.
       printf("lexer: enumerating characters in the multiline comment: %c\n",c);
+      if (c == '\n') yylineno++;
     }
 
     if ((c1 = input()) != '/' && c != 0)
@@ -65,5 +67,5 @@ void multiline_comment(){
     // if (c != 0)
     //   putchar(c1); // same here.
   /*} */
-
+  
 }
