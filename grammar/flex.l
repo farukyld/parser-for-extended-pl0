@@ -40,7 +40,7 @@ odd                                         { return ODD; }
 [A-Za-z_][A-Za-z_0-9]*                      { printf("lexer: returning token identifier: %s\n", yytext); return IDENTIFIER; } /* from lecture slides */
 
 [ \t]                                     ; /* consume those */
-\n                                          { yylineno++; }
+\n                                          { /*https://stackoverflow.com/questions/3747603/lex-print-line-numbers*/ yylineno++; }
 .                                           { printf("lexer: returning identically: %s\n", yytext); return *yytext; } /* return other single characters directly */ /* special */
 
 %%
