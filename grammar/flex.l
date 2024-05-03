@@ -27,6 +27,7 @@ if                                          { return IF; }
 else                                        { return ELSE; }
 then                                        { return THEN; }
 while                                       { return WHILE; }
+for                                         { return FOR; }
 do                                          { return DO; }
 odd                                         { return ODD; }
 \<\>                                        { return NE; }

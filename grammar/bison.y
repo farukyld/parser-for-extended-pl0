@@ -24,8 +24,9 @@ int yyerror(char * s);
 %token END // end
 %token IF // if
 %token THEN // then
-%token ELSE // then
+%token ELSE // ELSE
 %token WHILE // while
+%token FOR // while
 %token DO // do
 %token ODD // odd
 %token NE // <>
@@ -109,7 +110,21 @@ matched_statement:      IF condition THEN matched_statement ELSE matched_stateme
 open_statement:         IF condition THEN statement                                { printf("parsed open_statement using if cond then statement\n"); }
   |                     IF condition THEN matched_statement ELSE open_statement    { printf("parsed open_statement using if cond then matched else open\n"); }
   |                     WHILE condition DO statement                               { printf("parsed open_statement using while cond do statement\n"); }
+  |                     FOR for_loop_header DO statement                           { // similar to the while cond do stmt, for for_header do stmt looks like an open statement 
+                              printf("parsed open_statement using for for_loop_header do statement\n"); }
   ;
+
+for_loop_header:        '(' for_init_list ';' condition ';' for_step_list ')'
+  ;
+
+for_init_list:           IDENTIFIER ASSIGN expression
+  |                      for_init_list ','  IDENTIFIER ASSIGN expression
+  ;
+
+for_step_list:          IDENTIFIER ASSIGN expression
+  |                     for_step_list ',' IDENTIFIER ASSIGN expression
+  ;
+
 
 statement_list:         statement                     { printf("parsed statement list using single statement\n"); }
   |                     statement_list ';' statement  { printf("parsed statement list combining a statement to the statement_list\n"); }
