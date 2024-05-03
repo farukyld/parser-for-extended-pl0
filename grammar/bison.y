@@ -42,6 +42,7 @@ program: block  '.' {
   ;
 
 block: const_decl var_decl func_decl proc_decl statement
+  | error {yyerrok;printf("error in block\n");}
   ;
 
 const_decl:             CONST const_assignment_list ';'     { printf("completed parsing nonempty const_decl\n"); }
