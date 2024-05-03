@@ -39,7 +39,7 @@ LINK_FLAGS		:=  -o .$(LINKED_EXEC) -ll
 # run
 run: .$(LINKED_EXEC)
 	@echo "$(GREEN)running executable.$(DEFAULT)"
-	./.$(LINKED_EXEC) < inputs/simple.pl0
+	./.$(LINKED_EXEC) < inputs/error_input.pl0
 
 
 # link c files into executable

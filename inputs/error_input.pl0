@@ -1,0 +1,3 @@
+for(i := 0, j := 0; i < 3; i := i + 1, j := 2*i) do
+  call a const b=1;
+. another interesting error that puts the parser in infinity loop.

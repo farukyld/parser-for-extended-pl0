@@ -46,17 +46,19 @@ block: const_decl var_decl func_decl proc_decl statement
 
 const_decl:             CONST const_assignment_list ';'     { printf("completed parsing nonempty const_decl\n"); }
   |                                                         { printf("parsing empty const_decl\n"); }
+  | error {yyerrok;printf("error in const_decl\n");}
   ;
 
-const_assignment_list:  const_assignment                            { printf("completed parsing const_assignment_list with single const_assignment"); }
+const_assignment_list:  const_assignment                            { printf("completed parsing const_assignment_list with single const_assignment\n"); }
   |                     const_assignment_list ',' const_assignment  { printf("completed parsing const_assignment_list with multiple const_assignments\n"); }
   ;
 
 const_assignment:       IDENTIFIER '=' NUMBER
   ;
 
-var_decl:               VAR identifier_or_array_list ';'    { printf("completed nonempty var decl.");}
-  |                                                         { printf("completed empty var decl.");}
+var_decl:               VAR identifier_or_array_list ';'    { printf("completed nonempty var decl.\n");}
+  |                                                         { printf("completed empty var decl.\n");}
+  | error {yyerrok;printf("error in var_decl\n");}
   ;
 
 identifier_or_array_list:
@@ -71,11 +73,13 @@ identifier_list:        IDENTIFIER
   ;
 
 proc_decl:              proc_decl PROCEDURE IDENTIFIER ';' block ';'
-  |
+  | { printf("parsed empty proc_decl\n"); }
+  | error {yyerrok;printf("error in proc_decl\n");}
   ;
 
 func_decl:              func_decl FUNCTION IDENTIFIER '(' identifier_list ')' block ';'
-  |
+  | { printf("parsed empty func_decl\n"); }
+  | error {yyerrok;printf("error in func_decl\n");}
   ;
 
 // to modify the existing structure of this statement to adapt to
@@ -92,6 +96,7 @@ func_decl:              func_decl FUNCTION IDENTIFIER '(' identifier_list ')' bl
 
 statement:              matched_statement             { printf("parsed statement using matched statement\n"); }
   |                     open_statement                { printf("parsed statement using open statement\n"); }
+  | error {yyerrok;printf("error in statement\n");}
   ;
 
 matched_statement:      IF condition THEN matched_statement ELSE matched_statement { printf("parsed matched_statement using if cond then matched else matched\n"); }
