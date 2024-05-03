@@ -100,6 +100,7 @@ matched_statement:      IF condition THEN matched_statement ELSE matched_stateme
   |                     CALL IDENTIFIER                                            { printf("parsed matched_statement using call statement\n"); }
   |                     BGN statement_list END                                     { printf("parsed matched_statement using block statement\n"); }
   |                     RETURN expression                                          { printf("parsed matched_statement using return statement\n"); }
+  |                     RETURN                                                     { printf("parsed matched_statement using return statement\n"); }
   |                     BREAK                                                      { printf("parsed matched_statement using break statement\n"); }
   |                     io_statement                                               { printf("parsed matched_statement using io statement\n"); }
   |                                                                                { printf("parsed matched_statement using empty prod. rule\n"); }
