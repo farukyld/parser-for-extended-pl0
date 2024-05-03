@@ -51,11 +51,18 @@ const_assignment_list:  const_assignment                            { printf("co
   |                     const_assignment_list ',' const_assignment  { printf("completed parsing const_assignment_list with multiple const_assignments\n"); }
   ;
 
-const_assignment: IDENTIFIER '=' NUMBER
+const_assignment:       IDENTIFIER '=' NUMBER
   ;
 
-var_decl:               VAR identifier_list ';'             { printf("completed nonempty var decl.");}
+var_decl:               VAR identifier_or_array_list ';'    { printf("completed nonempty var decl.");}
   |                                                         { printf("completed empty var decl.");}
+  ;
+
+identifier_or_array_list:
+  |                     identifier_or_array_list ',' IDENTIFIER
+  |                     identifier_or_array_list ',' array_access
+  |                     IDENTIFIER
+  |                     array_access
   ;
 
 identifier_list:        IDENTIFIER
@@ -88,6 +95,7 @@ statement:              matched_statement             { printf("parsed statement
 
 matched_statement:      IF condition THEN matched_statement ELSE matched_statement { printf("parsed matched_statement using if cond then matched else matched\n"); }
   |                     IDENTIFIER ASSIGN expression                               { printf("parsed matched_statement using assignment\n"); }
+  |                     array_access ASSIGN expression                             { printf("parsed matched_statement using array assignment\n"); }
   |                     CALL IDENTIFIER                                            { printf("parsed matched_statement using call statement\n"); }
   |                     BGN statement_list END                                     { printf("parsed matched_statement using block statement\n"); }
   |                     RETURN expression                                          { printf("parsed matched_statement using return statement\n"); }
@@ -123,6 +131,11 @@ relation:               '='
   |                     GTE
   ;
 
+// I think pl0 language (ı guess from the overall structure) do not have expressions evaluating to pointers. so, the base of an array access is always an identifier.
+array_access:           IDENTIFIER '[' expression ']'
+  |                     array_access '[' expression ']'
+  ;
+
 expression:             term
   |                     add_sub_operator term
   |                     expression add_sub_operator term
@@ -143,5 +156,6 @@ mul_div_operator:       '*'
 
 factor:                 IDENTIFIER
   |                     NUMBER
+  |                     array_access
   |                     '(' expression ')'
   ;
