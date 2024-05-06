@@ -17,7 +17,7 @@ extern int yylineno;
       printf("error in " in_what ". at line: %d\n", yylineno); \
     } while(0)
 
-#define GIVE_PARSE_INFO 0
+#define GIVE_PARSE_INFO 1
 
 #if GIVE_PARSE_INFO
 #define PARSE_INFO(...) \
@@ -179,7 +179,12 @@ for_loop_header:        '(' for_init_list ';' condition ';' for_step_list ')'
   ;
 
 for_init_list:           IDENTIFIER ASSIGN expression
+  |                      IDENTIFIER ASSIGN error                          {ERROR_IN("for init list. check rhs of the assignment");}
+  |                      IDENTIFIER error expression                      {ERROR_MISSING("for init list", ":=");}
+  |                      IDENTIFIER error                                 {ERROR_MISSING("for init list", ":= and expression");}
   |                      for_init_list ','  IDENTIFIER ASSIGN expression
+  |                      for_init_list ','  IDENTIFIER ASSIGN error       {ERROR_IN("for init list. check rhs of the assignment");}
+  |                      for_init_list ','  IDENTIFIER error expression   {ERROR_MISSING("for init list", ":=");}
   ;
 
 for_step_list:          IDENTIFIER ASSIGN expression
