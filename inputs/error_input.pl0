@@ -1,11 +1,5 @@
-for(j ; i < 3; i := + 1, j := 2*i) do
-  begin
-  call a;
-  write (123)
-  end
-. for loop test. 
 
-var a[3], b[r*r][t*t];
+var a[3 a], b[r*r][t*t];
 
 begin
 a[1] := 3;

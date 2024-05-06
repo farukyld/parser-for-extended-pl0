@@ -17,7 +17,7 @@ extern int yylineno;
       printf("error in " in_what ". at line: %d\n", yylineno); \
     } while(0)
 
-#define GIVE_PARSE_INFO 1
+#define GIVE_PARSE_INFO 0
 
 #if GIVE_PARSE_INFO
 #define PARSE_INFO(...) \
