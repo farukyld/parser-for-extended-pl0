@@ -12,6 +12,7 @@ FLEX_FILE 		:= $(GRAMMAR_DIR)/flex.l
 
 
 # file names
+EXAMPLE_INPUT := inputs/simple.pl0
 LINKED_EXEC 	:= proj1.exe
 BISON_PREFIX 	:= parser
 FLEX_PREFIX		:= lexer
@@ -39,7 +40,7 @@ LINK_FLAGS		:=  -o .$(LINKED_EXEC) -ll
 # run
 run: .$(LINKED_EXEC)
 	@echo "$(GREEN)running executable.$(DEFAULT)"
-	./.$(LINKED_EXEC) < inputs/error_input.pl0
+	./.$(LINKED_EXEC) < $(EXAMPLE_INPUT)
 
 
 # link c files into executable
