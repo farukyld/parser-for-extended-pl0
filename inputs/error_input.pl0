@@ -1,10 +1,160 @@
+for(i := 0, j := 0; i < 3; i := i + 1, j := 2*i) do
+  begin
+  call a;
+  write (123)
+  end
+. for loop test. 
+
+var a[3], b[r*r][t*t];
+
+begin
+a[1] := 3;
+b[a+2][c*3] := d[a[-1]];
+end. array access test
+
+/*ab
+cd ef*/
+var x, y, z,/*ab
+cd ef*/ q, r, n, f;
+
+
+function sqrt(x)
+  return 1;
+
+function modulo(a,b)
+  return a%b;
+
+procedure multiply;
+var a, b;
+begin
+  a := x;
+  b := y;
+  z := 0;
+  while b > 0 do
+  begin
+    if odd b then z := z + a;
+    a := 2 * a;
+    b := b / 2
+  end
+end;
+
+procedure divide;
+var w;
+begin
+  r := x;
+  q := 0;
+  w := y;
+  while w <= r do w := 2 * w;
+  while w > y do
+  begin
+    q := 2 * q;
+    w := w / 2;
+    if w <= r then
+    begin
+      r := r - w;
+      q := q + 1
+    end
+  end
+end;
+
+procedure gcd;
+var f, g;
+begin
+  f := x;
+  g := y;
+  while f <> g do
+  begin
+    if f < g then g := g - f;
+    if g < f then f := f - g
+  end;
+  z := f
+end;
+
+procedure fact;
+begin
+  if n > 1 then
+  begin
+    f := n * f;
+    n := n - 1;
+    call fact
+  end
+end;
+
+
+begin
+  read(x); read(y); call multiply; write(z);
+  read(x); read(y); call divide; write(q); write(r);
+end. success
+from wikipedia, modified
+
+
+const max = 100;
+var arg, ret;
+
+procedure isprime;
+var i;
+begin
+	ret := 1;
+	i := 2;
+	while i < arg do
+	begin
+		if arg / i * i = arg then
+		begin
+			ret := 0;
+			i := arg
+		end;
+		i := i + 1
+	end
+end;
+
+procedure primes;
+begin
+	arg := 2;
+	while arg < max do
+	begin
+		call isprime;
+		if ret = 1 then stdout := arg;
+		arg := arg + 1
+	end
+end;
+
+call primes
+. success
+from wikipedia (modified)
 
 
 
-const a = 2, b = 3, 
-c =  ,
-= 4;
+var x, squ;
 
-var i,j,k[9];
+procedure square;
+begin
+   squ:= x * x
+end;
 
-.
+begin
+   x := 1;
+   while x <= 10 do
+   begin
+      call square;
+      x := x + 1
+   end
+end. success
+from wikipedia (modified)
+
+var i, s;
+begin
+  i := 0; s := 0;
+  while i < 5 do
+  begin
+    i := i + 1;
+    s := s + i * i
+  end
+end. success
+from wikipedia
+
+
+const
+  PI = 3.14159, e = 2.71828;
+
+. success
+simple const declaration example

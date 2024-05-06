@@ -58,7 +58,7 @@ printf(__VA_ARGS__);
 
 %%
 program: block  '.' {
-      PARSE_INFO("completed parsing program\n");
+      printf("completed parsing program\n");
       exit(0);
     }
   ;
