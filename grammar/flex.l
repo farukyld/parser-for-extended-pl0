@@ -1,8 +1,17 @@
 %{
 #include PARSER_HEADER
+#define GIVE_LEX_INFO 0
+#if GIVE_LEX_INFO
+// see variadic macros: https://gcc.gnu.org/onlinedocs/cpp/Variadic-Macros.html
+#define LEX_INFO(...) \
+  printf("lexer: "__VA_ARGS__);
+#else 
+#define LEX_INFO(...) \
+;
+#endif
 void multiline_comment();
 // below line works.
-// \/\/.*$                                     { printf("consumnig single line comment: %s\n", yytext); }
+// \/\/.*$                                     { LEX_INFO("consumnig single line comment: %s\n", yytext); }
 %}
 
 %%
@@ -10,7 +19,7 @@ void multiline_comment();
 \/\*                                        { /*unfortunetely, flex, and lex do not support lazy matching pattern.
                                               https://stackoverflow.com/questions/4166194/how-do-i-write-a-non-greedy-match-in-lex-flex
                                               https://www.lysator.liu.se/c/ANSI-C-grammar-l.html */ multiline_comment(); } 
-const                                       { printf("lexer: returning token CONST\n"); return CONST; } /* reserved multicharacter tokens */
+const                                       { LEX_INFO("lexer: returning token CONST\n"); return CONST; } /* reserved multicharacter tokens */
 var                                         { return VAR; }
 procedure                                   { return PROCEDURE; }
 function                                    { return FUNCTION; }
@@ -22,7 +31,7 @@ read                                        { return READ; }
 :=                                          { return ASSIGN; }
 call                                        { return CALL; }
 begin                                       { return BGN; }
-end                                         { printf("lexer: returning token end at line %d\n",yylineno);return END; }
+end                                         { LEX_INFO("lexer: returning token end at line %d\n",yylineno);return END; }
 if                                          { return IF; }
 else                                        { return ELSE; }
 then                                        { return THEN; }
@@ -36,18 +45,18 @@ odd                                         { return ODD; }
 
 
 
-([0-9]+|([0-9]*\.[0-9]+)([eE][-+]?[0-9]+)?) { printf("lexer: returning token number: %f\n", atof(yytext)); return NUMBER; } /* from lecture slides */ /* pattern matching tokens */
+([0-9]+|([0-9]*\.[0-9]+)([eE][-+]?[0-9]+)?) { LEX_INFO("lexer: returning token number: %f\n", atof(yytext)); return NUMBER; } /* from lecture slides */ /* pattern matching tokens */
 
-[A-Za-z_][A-Za-z_0-9]*                      { printf("lexer: returning token identifier: %s\n", yytext); return IDENTIFIER; } /* from lecture slides */
+[A-Za-z_][A-Za-z_0-9]*                      { LEX_INFO("lexer: returning token identifier: %s\n", yytext); return IDENTIFIER; } /* from lecture slides */
 
 [ \t]                                     ; /* consume those */
 \n                                          { /*https://stackoverflow.com/questions/3747603/lex-print-line-numbers*/ yylineno++; }
-.                                           { printf("lexer: returning identically: %s\n", yytext); return *yytext; } /* return other single characters directly */ /* special */
+.                                           { LEX_INFO("lexer: returning identically: %s\n", yytext); return *yytext; } /* return other single characters directly */ /* special */
 
 %%
 
 void yyerror(char*s){
-printf("%s\n",s);
+printf("%s at line: %d\n",s,yylineno);
 }
 
 // consume the stream until the first */ as done in the https://www.lysator.liu.se/c/ANSI-C-grammar-l.html
@@ -61,7 +70,7 @@ void multiline_comment(){
     while ((c = input()) != '*' && c != 0){
       // putchar(c); // I checked the assembly dump of the generated object file (object generated from lexer.c generated from this lex file)
       // it seems putchar is not used. and man putchar says putchar is to put character to standart output. and from the debug prints I made, I decide to comment this out.
-      printf("lexer: enumerating characters in the multiline comment: %c\n",c);
+      LEX_INFO("lexer: enumerating characters in the multiline comment: %c\n",c);
       if (c == '\n') yylineno++;
     }
 
